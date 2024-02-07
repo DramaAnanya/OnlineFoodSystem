@@ -1,0 +1,37 @@
+<div class="container">
+    <header class="modal-header">
+        <h1>Foods</h1>
+    </header>
+
+    <div class="container-fluid">
+        <input type="text" name="t1" class="form-control" placeholder="Search Items...." [(ngModel)]="searchText">
+        <div class="col-lg-4">
+            <p>Start Price: <input type="range" min="100" max="500" value="100" [(ngModel)]="startPrice">
+               <span class="badge badge-pills badge-info"><small>{{startPrice|currency:'INR'}}</small></span>
+            </p>
+            <p>
+              End Price  : <input type="range" min="100"  max="500" value="100" [(ngModel)]="endPrice">
+              <span><small class="badge badge-pills badge-warning">{{endPrice|currency:'INR'}}</small></span>
+            </p>
+             
+          </div>
+        <div class="row">
+            <div class="col-md-4" *ngFor="let Fobj of foodlist | search:searchText | priceRange:startPrice:endPrice|paginate:{
+                itemsPerPage:6,
+                currentPage:startLink,
+                totalItems:totalRows
+}">
+                <div class="card" style="width: 18rem;" (click)="toggleDescription(Fobj)">
+                    <img [src]="Fobj['food_image']" alt="Food Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{Fobj.food_name}}</h5>
+                        <p class="card-text" [hidden]="!Fobj.showDescription">{{Fobj['food_desc']}}</p>
+                        <p class="card-text">Price: <strong>{{Fobj.food_price | currency:'INR'}}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pagination-controls (pageChange)="startLink = $event"></pagination-controls>
+        
+    </div>
+</div>
